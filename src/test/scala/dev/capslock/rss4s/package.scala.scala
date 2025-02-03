@@ -22,7 +22,11 @@ class PackageSpec extends AnyFunSpec with Matchers {
       </rss>
       """)
       feed shouldBe Right(
-        Feed("test feed", new URL("https://a.feed.example.com")),
+        Feed(
+          "test feed",
+          new URL("https://a.feed.example.com"),
+          Some("This is test feed for RSS 2.0"),
+        ),
       )
     }
 
@@ -42,7 +46,11 @@ class PackageSpec extends AnyFunSpec with Matchers {
           </rss>
           """)
       feed shouldBe Right(
-        Feed("another test feed", new URL("https://another.feed.example.com")),
+        Feed(
+          "another test feed",
+          new URL("https://another.feed.example.com"),
+          Some("This is another test feed for RSS 2.0"),
+        ),
       )
     }
   }
