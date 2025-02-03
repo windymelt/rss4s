@@ -11,10 +11,14 @@ package object rss4s {
   }
   def parseFeed(feed: String): Either[ParseFeedError, Feed] = {
     import scala.xml._
-    val x           = xml.parsing.XhtmlParser(scala.io.Source.fromString(feed))
-    val title       = (x \ "channel" \ "title").text
-    val link        = (x \ "channel" \ "link").text
-    val description = Option((x \ "channel" \ "description").text)
+    val x     = xml.parsing.XhtmlParser(scala.io.Source.fromString(feed))
+    val title = (x \ "channel" \ "title").text
+    val link  = (x \ "channel" \ "link").text
+
+    val description = (x \ "channel" \ "description").text match
+      case "" => None
+      case s  => Some(s)
+
     Right(Feed(title, new URL(link), description))
   }
 }

@@ -53,5 +53,28 @@ class PackageSpec extends AnyFunSpec with Matchers {
         ),
       )
     }
+
+    it("should parse a RSS 2.0 feed without description") {
+      val feed = parseFeed("""<?xml version="1.0"?>
+          <rss version="2.0">
+          <channel>
+          <title>another test feed</title>
+          <link>https://another.feed.example.com</link>
+          <item>
+            <title>another test item</title>
+            <link>https://example.com/item</link>
+            <description>This is test item for RSS 2.0</description>
+          </item>
+          </channel>
+          </rss>
+          """)
+      feed shouldBe Right(
+        Feed(
+          "another test feed",
+          new URL("https://another.feed.example.com"),
+          None,
+        ),
+      )
+    }
   }
 }
