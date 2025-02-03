@@ -2,6 +2,7 @@ package dev.capslock.rss4s
 
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
+import java.net.URL
 
 class PackageSpec extends AnyFunSpec with Matchers {
   describe("rss4s") {
@@ -20,7 +21,9 @@ class PackageSpec extends AnyFunSpec with Matchers {
       </channel>
       </rss>
       """)
-      feed shouldBe Right(Feed("test feed"))
+      feed shouldBe Right(
+        Feed("test feed", new URL("https://a.feed.example.com")),
+      )
     }
 
     it("should parse a RSS 2.0 feed (2)") {
@@ -38,7 +41,9 @@ class PackageSpec extends AnyFunSpec with Matchers {
           </channel>
           </rss>
           """)
-      feed shouldBe Right(Feed("another test feed"))
+      feed shouldBe Right(
+        Feed("another test feed", new URL("https://another.feed.example.com")),
+      )
     }
   }
 }

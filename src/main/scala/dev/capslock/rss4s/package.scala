@@ -1,7 +1,9 @@
 package dev.capslock
 
+import java.net.URL
+
 package object rss4s {
-  case class Feed(title: String)
+  case class Feed(title: String, link: URL)
   enum ParseFeedError {
     case InvalidXml
     case InvalidFeed
@@ -12,6 +14,7 @@ package object rss4s {
     val x = xml.parsing.XhtmlParser(scala.io.Source.fromString(feed))
     println(x)
     val title = (x \ "channel" \ "title").text
-    Right(Feed(title))
+    val link  = (x \ "channel" \ "link").text
+    Right(Feed(title, new URL(link)))
   }
 }
