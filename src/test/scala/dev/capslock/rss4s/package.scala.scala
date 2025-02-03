@@ -21,11 +21,19 @@ class PackageSpec extends AnyFunSpec with Matchers {
       </channel>
       </rss>
       """)
+      val expectedItems = List(
+        Item(
+          "test item",
+          new URL("https://example.com/item"),
+          Some("This is test item for RSS 2.0"),
+        ),
+      )
       feed shouldBe Right(
         Feed(
           "test feed",
           new URL("https://a.feed.example.com"),
           Some("This is test feed for RSS 2.0"),
+          expectedItems,
         ),
       )
     }
@@ -45,11 +53,19 @@ class PackageSpec extends AnyFunSpec with Matchers {
           </channel>
           </rss>
           """)
+      val expectedItems = List(
+        Item(
+          "another test item",
+          new URL("https://example.com/item"),
+          Some("This is test item for RSS 2.0"),
+        ),
+      )
       feed shouldBe Right(
         Feed(
           "another test feed",
           new URL("https://another.feed.example.com"),
           Some("This is another test feed for RSS 2.0"),
+          expectedItems,
         ),
       )
     }
@@ -68,11 +84,19 @@ class PackageSpec extends AnyFunSpec with Matchers {
           </channel>
           </rss>
           """)
+      val expectedItems = List(
+        Item(
+          "another test item",
+          new URL("https://example.com/item"),
+          Some("This is test item for RSS 2.0"),
+        ),
+      )
       feed shouldBe Right(
         Feed(
           "another test feed",
           new URL("https://another.feed.example.com"),
           None,
+          expectedItems,
         ),
       )
     }
