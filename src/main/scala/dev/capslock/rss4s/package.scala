@@ -5,7 +5,7 @@ import scala.xml.Node
 import scala.xml.NodeSeq
 import java.time.OffsetDateTime
 
-package object rss4s {
+package object rss4s:
   case class Feed(
       title: String,
       link: URL,
@@ -19,19 +19,17 @@ package object rss4s {
       publishedAt: Option[OffsetDateTime] = None,
   )
 
-  enum FeedFormat {
+  enum FeedFormat:
     case Rss20
     case Atom
     case Unknown
-  }
 
-  enum ParseFeedError {
+  enum ParseFeedError:
     case InvalidXml
     case InvalidFeed
     case Unknown
-  }
 
-  def parseFeed(feedString: String): Either[ParseFeedError, Feed] = {
+  def parseFeed(feedString: String): Either[ParseFeedError, Feed] =
     import scala.xml.*
     import cats.syntax.traverse.{*, given} // toList.sequence
     import cats.syntax.option.{*, given}
@@ -43,10 +41,10 @@ package object rss4s {
       case FeedFormat.Atom  => domain.Atom.parse(feed)
       case FeedFormat.Unknown =>
         Left(ParseFeedError.InvalidFeed)
-  }
+  end parseFeed
 
   private def detectFeedFormat(feed: NodeSeq): FeedFormat =
     if domain.RSS20.seemsLike(feed) then FeedFormat.Rss20
     else if domain.Atom.seemsLike(feed) then FeedFormat.Atom
     else FeedFormat.Unknown
-}
+end rss4s

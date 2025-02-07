@@ -6,10 +6,10 @@ import java.net.URL
 import java.time.OffsetDateTime
 import scala.xml.Node
 
-object RSS20 {
+object RSS20:
   def seemsLike(tree: NodeSeq): Boolean = (tree \\ "rss").nonEmpty
 
-  def parse(tree: NodeSeq): Either[ParseFeedError, Feed] = {
+  def parse(tree: NodeSeq): Either[ParseFeedError, Feed] =
     import cats.syntax.traverse.{*, given} // toList.sequence
     import cats.syntax.option.{*, given}
 
@@ -19,13 +19,13 @@ object RSS20 {
     val description =
       (tree \ "channel" \ "description").text.some.filter(_.nonEmpty)
 
-    for {
+    for
       items <- (tree \ "channel" \ "item").map(parseRss20Item).toList.sequence
       feed  <- Right(Feed(title, new URL(link), description, items))
-    } yield feed
-  }
+    yield feed
+  end parse
 
-  private def parseRss20Item(item: Node): Either[ParseFeedError, Item] = {
+  private def parseRss20Item(item: Node): Either[ParseFeedError, Item] =
     import cats.syntax.option.{*, given}
 
     val title       = (item \ "title").text
@@ -43,9 +43,9 @@ object RSS20 {
         parsedPublishedAt,
       ),
     )
-  }
+  end parseRss20Item
 
-  private def parseRss20DateTime(s: String): Option[OffsetDateTime] = {
+  private def parseRss20DateTime(s: String): Option[OffsetDateTime] =
     import java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME
     import scala.util.control.Exception.allCatch
 
@@ -57,5 +57,5 @@ object RSS20 {
     allCatch.opt(
       OffsetDateTime.parse(s, RFC_1123_DATE_TIME),
     )
-  }
-}
+  end parseRss20DateTime
+end RSS20

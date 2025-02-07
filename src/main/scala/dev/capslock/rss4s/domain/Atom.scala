@@ -6,10 +6,10 @@ import java.net.URL
 import java.time.OffsetDateTime
 import scala.xml.Node
 
-object Atom {
+object Atom:
   def seemsLike(tree: NodeSeq): Boolean = (tree \\ "feed").nonEmpty
 
-  def parse(tree: NodeSeq): Either[ParseFeedError, Feed] = {
+  def parse(tree: NodeSeq): Either[ParseFeedError, Feed] =
     import cats.syntax.traverse.{*, given} // toList.sequence
     import cats.syntax.option.{*, given}
 
@@ -18,13 +18,13 @@ object Atom {
 
     val description = (tree \ "subtitle").text.some.filter(_.nonEmpty)
 
-    for {
+    for
       items <- (tree \ "entry").map(parseAtomItem).toList.sequence
       feed  <- Right(Feed(title, new URL(link.get), description, items))
-    } yield feed
-  }
+    yield feed
+  end parse
 
-  private def parseAtomItem(item: Node): Either[ParseFeedError, Item] = {
+  private def parseAtomItem(item: Node): Either[ParseFeedError, Item] =
     import cats.syntax.option.{*, given}
 
     val title = (item \ "title").text
@@ -41,9 +41,9 @@ object Atom {
         parsedPublishedAt,
       ),
     )
-  }
+  end parseAtomItem
 
-  private def parseAtomDateTime(s: String): Option[OffsetDateTime] = {
+  private def parseAtomDateTime(s: String): Option[OffsetDateTime] =
     import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
     import scala.util.control.Exception.allCatch
 
@@ -57,5 +57,5 @@ object Atom {
     allCatch.opt(
       OffsetDateTime.parse(s, ISO_OFFSET_DATE_TIME),
     )
-  }
-}
+  end parseAtomDateTime
+end Atom
